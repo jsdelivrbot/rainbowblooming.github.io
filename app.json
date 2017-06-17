@@ -1,0 +1,9 @@
+{
+  "name": "RainbowBlooming",
+  "description": "some apps for rainbowblooming",
+  "repository": "https://github.com/rainbowblooming/rainbowblooming.github.io.git",
+  "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/master/public/node.svg",
+  "keywords": ["rainbow", "marriage", "equality"],
+  "image": "heroku/nodejs"
+}
+
