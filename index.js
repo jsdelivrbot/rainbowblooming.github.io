@@ -13,7 +13,7 @@ app.set('view engine', 'ejs');
 app.set('view engine', 'pug');
 
 app.get('/', function(request, response) {
-	response.render('index');
+	response.render('login');
 });
 
 app.listen(app.get('port'), function() {
