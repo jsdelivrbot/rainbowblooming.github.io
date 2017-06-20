@@ -15,14 +15,22 @@ html
 						h1(class="modal-title text-center") 彩虹花開
 
 					div(class="modal-body pull-center")
+						form(action="/auth/google")
+							button(type="submit" class="primary" id="login_fb") 登入
 						div(id="my-signin2")
 
 					div(class="modal-footer")
 
-	
 		script.
+			function loginFB() {
+			}
+
 			function onSuccess(googleUser) {
-				console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+				var profile = googleUser.getBasicProfile();
+				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+				console.log('Name: ' + profile.getName());
+				console.log('Image URL: ' + profile.getImageUrl());
+				console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 			}
 			
 			function onFailure(error) {
@@ -39,14 +47,6 @@ html
 					'onsuccess': onSuccess,
 					'onfailure': onFailure
 				});
-			}
-
-			function onSignIn(googleUser) {
-				var profile = googleUser.getBasicProfile();
-				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-				console.log('Name: ' + profile.getName());
-				console.log('Image URL: ' + profile.getImageUrl());
-				console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 			}
 
 		script(src="https://apis.google.com/js/platform.js?onload=renderButton" async defer)
