@@ -8,7 +8,7 @@ var GoogleStrategy = require('passport-google-oauth20').Strategy;
 passport.use(new GoogleStrategy({
 	clientID: '712853165091-ddk7io2fnhhd3h0g82vr6hrashunt9bt.apps.googleusercontent.com',
 	clientSecret: 'xGBTpVTqZJRTU9HhxjVlrDCa',
-	callbackURL: "https://rainbowblooming.herokuapp.com//auth/google/callback"
+	callbackURL: "https://rainbowblooming.herokuapp.com/auth/google/callback"
 	},
 	function(accessToken, refreshToken, profile, cb) {
 		User.findOrCreate({ googleId: profile.id }, function (err, user) {
