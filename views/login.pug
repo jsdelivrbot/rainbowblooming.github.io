@@ -16,15 +16,13 @@ html
 
 					div(class="modal-body pull-center")
 						form(action="/auth/google")
+							<%=message%>
 							button(type="submit" class="primary" id="login_fb") 登入
 						div(id="my-signin2")
 
 					div(class="modal-footer")
 
 		script.
-			function loginFB() {
-			}
-
 			function onSuccess(googleUser) {
 				var profile = googleUser.getBasicProfile();
 				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
