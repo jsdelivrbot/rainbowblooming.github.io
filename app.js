@@ -8,6 +8,8 @@ var favicon = require('serve-favicon');
 
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
+// 測試
+var LocalStrategy = require('passport-local').Strategy;
 
 var pg = require('pg');
 
@@ -51,7 +53,6 @@ app.use(session({
 	store: new pgSession({
 		pool : db
 	}),
-	store: new (require('connect-pg-simple')(session))(),
 	saveUninitialized: true,
 	secret: process.env.FOO_COOKIE_SECRET,
 	resave: false,
@@ -60,20 +61,43 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new GoogleStrategy({
-	clientID: process.env.clientID,
-	clientSecret: process.env.clientSecret,
-	callbackURL: "https://rainbowblooming.herokuapp.com/auth/google/callback"
-	},
-	function(accessToken, refreshToken, profile, done) {
-		console.log('成功得到 accessToken: '+accessToken);
-		console.log('成功得到 refreshToken: '+refreshToken);
-		console.log('成功得到 profile: '+profile);
-	//	User.find({ googleId: profile.id }, function (err, user) {
-	//		return done(err, user);
-	//	});
-	}
+//passport.use(new GoogleStrategy({
+//	clientID: process.env.clientID,
+//	clientSecret: process.env.clientSecret,
+//	callbackURL: "https://rainbowblooming.herokuapp.com/auth/google/callback"
+//	},
+//	function(accessToken, refreshToken, profile, done) {
+//		console.log('成功得到 accessToken: '+accessToken);
+//		console.log('成功得到 refreshToken: '+refreshToken);
+//		console.log('成功得到 profile: '+profile);
+//	//	User.find({ googleId: profile.id }, function (err, user) {
+//	//		return done(err, user);
+//	//	});
+//	}
+//));
+
+// 測試
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+   // User.findOne({ username: username }, function (err, user) {
+      if (err) { return done(err); }
+   //   if (!user) {
+   //     return done(null, false, { message: 'Incorrect username.' });
+   //   }
+   //   if (!user.validPassword(password)) {
+   //     return done(null, false, { message: 'Incorrect password.' });
+   //   }
+      return done(null, username);
+   // });
+  }
 ));
+app.post('/login',
+  passport.authenticate('local', { successRedirect: '/index',
+                                   failureRedirect: '/login'
+                                   ,failureFlash: false 
+      })
+);
+
 // use google authentication
 app.get('/auth/google',
 	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'] })

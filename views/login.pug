@@ -19,6 +19,13 @@ html
 							button(type="submit" class="primary" id="login_fb") 登入
 						div(id="my-signin2")
 
+					div(class="modal-body pull-center")
+						form(method="post" action="/login")
+							input(type="text" id="name" name="name" value="hao" hidden="true")
+							input(type="password" id="password" name="password" value="pwd" hidden="true")
+							button(type="submit" class="primary" id="login_fb") local 登入
+						div(id="my-signin2")
+
 					div(class="modal-footer")
 
 		script.
