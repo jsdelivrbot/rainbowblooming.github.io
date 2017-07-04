@@ -47,12 +47,11 @@ app.get('/index', function(request, response) {
 	response.render('index');
 });
 
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(session({
 	store: new pgSession({
 		pool : db
 	}),
-	saveUninitialized: true,
+	//saveUninitialized: true,
 	secret: process.env.FOO_COOKIE_SECRET,
 	resave: false,
 	cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
