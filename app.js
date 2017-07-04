@@ -51,7 +51,7 @@ app.use(session({
 //	store: new pgSession({
 //		pool : db
 //	}),
-	store: new (require('connect-pg-simple')(session))()
+	store: new (require('connect-pg-simple')(session))(),
 	saveUninitialized: true,
 	secret: process.env.FOO_COOKIE_SECRET,
 	resave: false,
