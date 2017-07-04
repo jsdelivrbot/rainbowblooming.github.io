@@ -68,7 +68,7 @@ passport.use(new GoogleStrategy({
 	function(accessToken, refreshToken, profile, done) {
 		console.log('成功得到 accessToken: '+accessToken);
 		console.log('成功得到 refreshToken: '+refreshToken);
-		console.log('成功得到 profile: '+profile;
+		console.log('成功得到 profile: '+profile);
 	//	User.find({ googleId: profile.id }, function (err, user) {
 	//		return done(err, user);
 	//	});
