@@ -18,35 +18,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = new pg.Pool(process.env.DATABASE_URL);
 
-passport.use(new GoogleStrategy({
-	clientID: process.env.clientID,
-	clientSecret: process.env.clientSecret,
-	callbackURL: "https://rainbowblooming.herokuapp.com/auth/google/callback"
-	},
-	function(accessToken, refreshToken, profile, cb) {
-		User.findOrCreate({ googleId: profile.id }, function (err, user) {
-			return cb(err, user);
-		});
-	}
-));
 
 // use favicon.ico
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 app.set('port', (process.env.PORT || 5000));
 // Middleware
 app.use(express.static(__dirname + '/public'));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
-app.use(session({
-	store: new pgSession({
-		pool : db
-	}),
-	saveUninitialized: true,
-	secret: process.env.FOO_COOKIE_SECRET,
-	resave: false,
-	cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
-}));
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.engine('pug', require('pug').__express);
 
@@ -70,9 +47,37 @@ app.get('/index', function(request, response) {
 	response.render('index');
 });
 
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(session({
+	store: new pgSession({
+		pool : db
+	}),
+	saveUninitialized: true,
+	secret: process.env.FOO_COOKIE_SECRET,
+	resave: false,
+	cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new GoogleStrategy({
+	clientID: process.env.clientID,
+	clientSecret: process.env.clientSecret,
+	callbackURL: "https://rainbowblooming.herokuapp.com/auth/google/callback"
+	},
+	function(accessToken, refreshToken, profile, done) {
+		console.log('成功得到 accessToken: '+accessToken);
+		console.log('成功得到 refreshToken: '+refreshToken);
+		console.log('成功得到 profile: '+profile);
+	//	User.find({ googleId: profile.id }, function (err, user) {
+	//		return done(err, user);
+	//	});
+	}
+));
 // use google authentication
 app.get('/auth/google',
-	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'] }));
+	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'] })
+);
 
 // 成功登入後
 app.get('/auth/google/callback', 
