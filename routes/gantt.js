@@ -8,6 +8,7 @@ const db = new pg.Pool(process.env.DATABASE_URL);
 
 // dhtmlxgantt
 router.get("/", function (req, res, next) {
+	console.log('查詢開始: '+process.env.DATABASE_URL);
 	db.query("SELECT * FROM gantt_tasks", function (err, result_tasks, done) {
 		if (err) console.log(err);
 		db.query("SELECT * FROM gantt_links", function (err, result_links) {
