@@ -1,29 +1,22 @@
 var express = require('express');
-var app = express();
-var pg = require('pg');
+var router = express.Router();
 
-var bodyParser = require('body-parser');
 require("date-format-lite");
 
-app.use(bodyParser.urlencoded({ extended: true }));
-
+var pg = require('pg');
 const db = new pg.Pool(process.env.DATABASE_URL);
 
 // dhtmlxgantt
-app.get("/data", function (req, res) {
-	console.log('開始查詢. ');
+router.get("/", function (req, res, next) {
 	db.query("SELECT * FROM gantt_tasks", function (err, result_tasks, done) {
 		if (err) console.log(err);
 		db.query("SELECT * FROM gantt_links", function (err, result_links) {
-			//console.log('查詢的 links: '+ JSON.stringify(result_tasks));
 			//done();
 			if (err) console.log(err);
 			// query rows
 			var rows = result_tasks.rows;
 			var links = result_links.rows;
-			//console.log('查詢的 result_tasks.rows: '+ JSON.stringify(result_tasks.rows));
 			for (var i = 0; i < rows.length; i++) {
-				//console.log('row_'+i+ JSON.stringify(rows[i]));
 				// rows[i].start_date = rows[i].start_date.format("YYYY-MM-DDThh:mm:ss");
 				// 直接將 timestamp 轉成 YYYY-MM-DD
 				rows[i].start_date = rows[i].start_date.date("DD-MM-YYYY");
@@ -35,7 +28,7 @@ app.get("/data", function (req, res) {
 	});
 });
 
-app.post("/data/task", function (req, res) {
+router.post("/task", function (req, res, next) {
 	var task = getTask(req.body);
 
 	db.query("INSERT INTO gantt_tasks(text, start_date, duration, progress, parent) VALUES ($1,$2,$3,$4,$5)",
@@ -45,7 +38,7 @@ app.post("/data/task", function (req, res) {
 		});
 });
 
-app.put("/data/task/:id", function (req, res) {
+router.put("/task/:id", function (req, res, next) {
 	var sid = req.params.id,
 		task = getTask(req.body);
 
@@ -57,7 +50,7 @@ app.put("/data/task/:id", function (req, res) {
 		});
 });
 
-app.delete("/data/task/:id", function (req, res) {
+router.delete("/task/:id", function (req, res, next) {
 	var sid = req.params.id;
 	db.query("DELETE FROM gantt_tasks WHERE id = $1", [sid],
 		function (err, result) {
@@ -65,7 +58,7 @@ app.delete("/data/task/:id", function (req, res) {
 		});
 });
 
-app.post("/data/link", function (req, res) {
+router.post("/link", function (req, res, next) {
 	var link = getLink(req.body);
 
 	db.query("INSERT INTO gantt_links (source, target, type) VALUES ($1,$2,$3)",
@@ -75,7 +68,7 @@ app.post("/data/link", function (req, res) {
 		});
 });
 
-app.put("/data/link/:id", function (req, res) {
+router.put("/link/:id", function (req, res, next) {
 	var sid = req.params.id,
 		link = getLink(req.body);
 
@@ -86,7 +79,7 @@ app.put("/data/link/:id", function (req, res) {
 		});
 });
 
-app.delete("/data/link/:id", function (req, res) {
+router.delete("/link/:id", function (req, res, next) {
 	var sid = req.params.id;
 	db.query("DELETE FROM gantt_links WHERE id = $1", [sid],
 		function (err, result) {
@@ -127,3 +120,4 @@ function sendResponse(res, action, tid, error) {
 	res.send(result);
 }
 
+module.exports = router;

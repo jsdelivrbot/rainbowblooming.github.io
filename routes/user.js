@@ -4,8 +4,9 @@ var app = express();
 var router = express.Router();
 var pg = require('pg');
 
-function find({ googleId: profile.id }, function (err, user) {
-	db.query("SELECT * FROM gantt_links", function (err, result_links) {
+//function find({ googleId: profile.id }, function (err, user) {
+function find( id, function (err, user) {
+	db.query("SELECT * FROM session where ", function (err, result_links) {
 		//console.log('查詢的 links: '+ JSON.stringify(result_tasks));
 		//done();
 		if (err) console.log(err);
