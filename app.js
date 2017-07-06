@@ -34,6 +34,9 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.set('view engine', 'pug');
 
+// 使用者認證
+var Account = require('./routes/account');
+
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
@@ -86,6 +89,7 @@ function checkLogin(req, res, next) {
 // 測試
 passport.use(new LocalStrategy(
   function(username, password, done) {
+  	  console.log('驗證結果: '+ Account.find(username));
    // console.log('輸入的 username: '+username);
    // console.log('輸入的 password: '+password);
    // User.findOne({ username: username }, function (err, user) {
