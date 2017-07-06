@@ -9,7 +9,7 @@ var favicon = require('serve-favicon');
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 // 測試
-var LocalStrategy = require('passport-local').Strategy;
+// var LocalStrategy = require('passport-local').Strategy;
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -71,39 +71,39 @@ function checkLogin(req, res, next) {
 	}
 }
 
-//passport.use(new GoogleStrategy({
-//	clientID: process.env.clientID,
-//	clientSecret: process.env.clientSecret,
-//	callbackURL: "https://rainbowblooming.herokuapp.com/auth/google/callback"
-//	},
-//	function(accessToken, refreshToken, profile, done) {
-//		console.log('成功得到 accessToken: '+accessToken);
-//		console.log('成功得到 refreshToken: '+refreshToken);
-//		console.log('成功得到 profile: '+profile);
-//	//	User.find({ googleId: profile.id }, function (err, user) {
-//	//		return done(err, user);
-//	//	});
-//	}
-//));
-
-// 測試
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-  	  console.log('驗證結果: '+ Account.find(username));
-   // console.log('輸入的 username: '+username);
-   // console.log('輸入的 password: '+password);
-   // User.findOne({ username: username }, function (err, user) {
-   // if (err) { return done(err); }
-   //   if (!user) {
-   //     return done(null, false, { message: 'Incorrect username.' });
-   //   }
-   //   if (!user.validPassword(password)) {
-   //     return done(null, false, { message: 'Incorrect password.' });
-   //   }
-      return done(null, username);
-   // });
-  }
+passport.use(new GoogleStrategy({
+	clientID: process.env.clientID,
+	clientSecret: process.env.clientSecret,
+	callbackURL: "https://rainbowblooming.herokuapp.com/auth/google/callback"
+	},
+	function(accessToken, refreshToken, profile, done) {
+		console.log('成功得到 accessToken: '+accessToken);
+		console.log('成功得到 refreshToken: '+refreshToken);
+		console.log('成功得到 profile: '+profile);
+	//	User.find({ googleId: profile.id }, function (err, user) {
+	//		return done(err, user);
+	//	});
+	}
 ));
+
+// 測試 LocalStrategy
+//passport.use(new LocalStrategy(
+//  function(username, password, done) {
+//  	  console.log('驗證結果: '+ Account.find(username));
+//   // console.log('輸入的 username: '+username);
+//   // console.log('輸入的 password: '+password);
+//   // User.findOne({ username: username }, function (err, user) {
+//   // if (err) { return done(err); }
+//   //   if (!user) {
+//   //     return done(null, false, { message: 'Incorrect username.' });
+//   //   }
+//   //   if (!user.validPassword(password)) {
+//   //     return done(null, false, { message: 'Incorrect password.' });
+//   //   }
+//      return done(null, username);
+//   // });
+//  }
+//));
 
 passport.serializeUser(function(user, done) {
 	done(null, user);
@@ -116,24 +116,24 @@ passport.deserializeUser(function(id, done) {
 });
 
 app.all('/login',
-	passport.authenticate('local', { successRedirect: '/index',
+	passport.authenticate('google', { successRedirect: '/index',
 									failureRedirect: '/'
 									,failureFlash: false 
 	})
 );
 
 // use google authentication
-//app.get('/auth/google',
-//	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'] })
-//);
-//
-//// 成功登入後
-//app.get('/auth/google/callback', 
-//	passport.authenticate('google', { failureRedirect: '/' }),
-//	function(req, res) {
-//		console.log('成功登入!');
-//		// Successful authentication, redirect home.
-//		res.redirect('/index');
-//	}
-//);
+app.get('/auth/google',
+	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'] })
+);
+
+// 成功登入後
+app.get('/auth/google/callback', 
+	passport.authenticate('google', { failureRedirect: '/' }),
+	function(req, res) {
+		console.log('成功登入!');
+		// Successful authentication, redirect home.
+		res.redirect('/index');
+	}
+);
 
