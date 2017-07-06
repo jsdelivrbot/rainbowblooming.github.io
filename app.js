@@ -56,18 +56,14 @@ app.get('/', function(request, response) {
 });
 
 app.get('/index', checkLogin, function(request, response) {
-	console.log('如果直接呼叫? request.isAuthenticated()' + request.isAuthenticated());
 	response.render('index');
 });
 
 // 檢查是否登入
 function checkLogin(req, res, next) {
-	console.log('進入檢查');
 	if (req.isAuthenticated()) {
-		console.log('有認證!');
 		next();
 	} else {
-		console.log('沒有認證!');
 		res.redirect('/login');
 	}
 }
@@ -106,14 +102,11 @@ passport.use(new LocalStrategy(
 ));
 
 passport.serializeUser(function(user, done) {
-	console.log('使用者 user: '+user);
-	console.log('使用者 JSON.stringify(user): '+JSON.stringify(user));
 	done(null, user);
 });
 
 passport.deserializeUser(function(id, done) {
 	//User.findById(id, function(err, user) {
-	console.log('在 deserialize 裡 id: '+id);
 		done(null, id);
 	//});
 });

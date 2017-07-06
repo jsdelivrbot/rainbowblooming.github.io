@@ -4,30 +4,67 @@ var router = express.Router();
 require("date-format-lite");
 
 var pg = require('pg');
-const db = new pg.Pool(process.env.DATABASE_URL);
+pg.defaults.ssl = (process.env.NODE_ENV=='true');
+//pg.defaults.ssl = false;
+console.log('變數: '+process.env.NODE_ENV);
+// 待刪除
+var db;
 
-// dhtmlxgantt
 router.get("/", function (req, res, next) {
-	console.log('查詢開始: '+process.env.DATABASE_URL);
-	db.query("SELECT * FROM gantt_tasks", function (err, result_tasks, done) {
-		if (err) console.log(err);
-		db.query("SELECT * FROM gantt_links", function (err, result_links) {
-			//done();
-			if (err) console.log(err);
-			// query rows
-			var rows = result_tasks.rows;
-			var links = result_links.rows;
-			for (var i = 0; i < rows.length; i++) {
-				// rows[i].start_date = rows[i].start_date.format("YYYY-MM-DDThh:mm:ss");
-				// 直接將 timestamp 轉成 YYYY-MM-DD
-				rows[i].start_date = rows[i].start_date.date("DD-MM-YYYY");
-				rows[i].open = true;
-			}
-
-			res.send({ data: rows, collections: { links: links } });
-		});
+	pg.connect(process.env.DATABASE_URL, function(err, client) {
+		if (err) {
+			console.log(err);
+		} else {
+			console.log('Connected to postgres! Getting schemas...');
+	
+			client.query('SELECT * FROM gantt_tasks', function (err, result_tasks, done) {
+				if (err) {
+					console.log(err);
+				} else {
+					client.query("SELECT * FROM gantt_links", function (err, result_links) {
+						if (err) {
+							console.log(err);
+						} else {
+							// query rows
+							var rows = result_tasks.rows;
+							var links = result_links.rows;
+							for (var i = 0; i < rows.length; i++) {
+								// rows[i].start_date = rows[i].start_date.format("YYYY-MM-DDThh:mm:ss");
+								// 直接將 timestamp 轉成 YYYY-MM-DD
+								rows[i].start_date = rows[i].start_date.date("DD-MM-YYYY");
+								rows[i].open = true;
+							}
+	
+							res.send({ data: rows, collections: { links: links } });
+						}
+					});
+				}
+			})	
+		}
 	});
 });
+
+// dhtmlxgantt
+//router.get("/", function (req, res, next) {
+//	db.query("SELECT * FROM gantt_tasks", function (err, result_tasks, done) {
+//		if (err) console.log(err);
+//		db.query("SELECT * FROM gantt_links", function (err, result_links) {
+//			//done();
+//			if (err) console.log(err);
+//			// query rows
+//			var rows = result_tasks.rows;
+//			var links = result_links.rows;
+//			for (var i = 0; i < rows.length; i++) {
+//				// rows[i].start_date = rows[i].start_date.format("YYYY-MM-DDThh:mm:ss");
+//				// 直接將 timestamp 轉成 YYYY-MM-DD
+//				rows[i].start_date = rows[i].start_date.date("DD-MM-YYYY");
+//				rows[i].open = true;
+//			}
+//
+//			res.send({ data: rows, collections: { links: links } });
+//		});
+//	});
+//});
 
 router.post("/task", function (req, res, next) {
 	var task = getTask(req.body);
