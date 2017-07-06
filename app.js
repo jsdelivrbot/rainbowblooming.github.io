@@ -80,6 +80,8 @@ passport.use(new GoogleStrategy({
 		console.log('成功得到 accessToken: '+accessToken);
 		console.log('成功得到 refreshToken: '+refreshToken);
 		console.log('成功得到 profile: '+profile);
+		console.log('成功得到 JSON.stringify(profile): '+JSON.stringify(profile));
+		done(null, profile.id);
 	//	User.find({ googleId: profile.id }, function (err, user) {
 	//		return done(err, user);
 	//	});
