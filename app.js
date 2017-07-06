@@ -116,16 +116,21 @@ passport.deserializeUser(function(id, done) {
 });
 
 app.all('/login',
-	passport.authenticate('google', { successRedirect: '/index',
-									failureRedirect: '/'
-									,failureFlash: false 
+	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
+									successRedirect: '/index',
+									failureRedirect: '/',
+									failureFlash: false 
 	})
 );
 
 // use google authentication
-app.get('/auth/google',
-	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'] })
-);
+//app.get('/auth/google',
+//	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
+//										successRedirect: '/index',
+//										failureRedirect: '/',
+//										failureFlash: false 
+//	})
+//);
 
 // 成功登入後
 app.get('/auth/google/callback', 
