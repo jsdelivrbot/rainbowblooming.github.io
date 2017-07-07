@@ -40,7 +40,6 @@ router.find = function (email) {
 		//	);
 		}
 	});
-	return result;
 }
 
 module.exports = router;
