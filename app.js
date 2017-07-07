@@ -122,7 +122,7 @@ passport.deserializeUser(function(user, done) {
 
 app.all('/login',
 	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
-	passport.authenticate('local', { 
+	//passport.authenticate('local', { 
 									successRedirect: '/index',
 									failureRedirect: '/',
 									failureFlash: false 
