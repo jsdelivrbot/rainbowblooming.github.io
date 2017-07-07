@@ -9,7 +9,7 @@ var favicon = require('serve-favicon');
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 // 測試
-var LocalStrategy = require('passport-local').Strategy;
+//var LocalStrategy = require('passport-local').Strategy;
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -121,14 +121,13 @@ passport.deserializeUser(function(user, done) {
 });
 
 app.all('/login',
-	//passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
+	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
 	passport.authenticate('local', { 
 									successRedirect: '/index',
 									failureRedirect: '/',
 									failureFlash: false 
 	})
 );
-
 
 // 成功登入後
 app.get('/auth/google/callback', 
