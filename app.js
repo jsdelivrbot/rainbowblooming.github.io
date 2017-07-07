@@ -83,10 +83,13 @@ passport.use(new GoogleStrategy({
 		console.log('成功得到 JSON.stringify(profile): '+JSON.stringify(profile));
 		console.log('成功得到 profile.emails[0].value: '+profile.emails[0].value);
 		var email = '';
+		var session_user = '';
 		try {
 			email = profile.emails[0].value;
+			session_user = profile.id;
+			console.log('mail = '+email +'; profile.id = '+session_user)
 			if(Account.find(profile.emails[0].value)){
-				return done(null, profile.id);
+				return done(null, session_user);
 			} else {
 	    	    return done(null, false, { message: '帳號沒有權限.' });
 			}

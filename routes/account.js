@@ -20,6 +20,7 @@ router.find = function (email) {
 						console.log('驗證查詢: result.rows = '+result.rows);
 						console.log('驗證查詢: JSON.stringify(result.rows) = '+JSON.stringify(result.rows));
 						if(result.rows) {
+							console.log('有查到使用者');
 							result = true;
 						}
 					}
