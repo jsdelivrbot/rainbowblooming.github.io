@@ -90,8 +90,10 @@ passport.use(new GoogleStrategy({
 			session_user = profile.id;
 			console.log('mail = '+email +'; profile.id = '+session_user)
 			if(Account.find(profile.emails[0].value)){
+				console.log('執行完 Account.find, 而且有找到. ');
 				return done(null, session_user);
 			} else {
+				console.log('執行完 Account.find, 沒有找到. ');
 	    	    return done(null, false, { message: '帳號沒有權限.' });
 			}
 		} catch (err) {
