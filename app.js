@@ -139,7 +139,7 @@ app.all('/login',
 );
 
 // 成功登入後
-app.get('/auth/google/callback', 
+app.all('/auth/google/callback', 
 	passport.authenticate('google', { failureRedirect: '/' }),
 	function(req, res) {
 		console.log('成功登入!');
