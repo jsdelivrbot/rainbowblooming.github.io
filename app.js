@@ -64,6 +64,7 @@ app.get('/index', checkLogin, function(request, response) {
 
 // 檢查是否登入
 function checkLogin(req, res, next) {
+	console.log('檢查是否登入 req.isAuthenticated(): '+req.isAuthenticated());
 	if (req.isAuthenticated()) {
 		next();
 	} else {
@@ -130,11 +131,11 @@ passport.deserializeUser(function(user, done) {
 });
 
 app.all('/login',
-	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
+	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.profile.emails.read']
 	//passport.authenticate('local', { 
-									successRedirect: '/index',
-									failureRedirect: '/',
-									failureFlash: false 
+//									,successRedirect: '/index',
+//									failureRedirect: '/',
+//									failureFlash: false 
 	})
 );
 
