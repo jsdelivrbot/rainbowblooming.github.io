@@ -24,6 +24,8 @@ router.find = function (email) {
 							result = true;
 						}
 					}
+					
+					return result;
 				}
 			);
 		//	client.query("SELECT * FROM account where email=$1", [email]).on('rows', function(rows) { 
