@@ -82,12 +82,18 @@ passport.use(new GoogleStrategy({
 		console.log('成功得到 profile: '+profile);
 		console.log('成功得到 JSON.stringify(profile): '+JSON.stringify(profile));
 		console.log('成功得到 profile.emails[0].value: '+profile.emails[0].value);
-		if(Accoutn.find(username)){
-			return done(null, profile.id);
-		} else {
-	        return done(null, false, { message: '帳號沒有權限.' });
+		var email = '';
+		try {
+			email = profile.emails[0].value;
+			if(Account.find(profile.emails[0].value)){
+				return done(null, profile.id);
+			} else {
+	    	    return done(null, false, { message: '帳號沒有權限.' });
+			}
+		} catch (err) {
+			console.log('err from : '+err);
+			return done(null, false, { message: '錯誤發生.' });
 		}
-		done(null, profile.id);
 	}
 ));
 
