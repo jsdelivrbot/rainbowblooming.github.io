@@ -21,14 +21,13 @@ router.find = function (profile, callback) {
 					} else {
 						 if (typeof callback === "function") {
 							 // Call it, since we have confirmed it is callable​
-   						     callback(options);
+							if(result.rows) {
+								console.log('有查到使用者');
+								callback(err, profile.id).call;
+							}
    						 }
 						console.log('驗證查詢: result.rows = '+result.rows);
 						console.log('驗證查詢: JSON.stringify(result.rows) = '+JSON.stringify(result.rows));
-						if(result.rows) {
-							console.log('有查到使用者');
-							callback(err, profile.id).call;
-						}
 					}
 				}
 			);
