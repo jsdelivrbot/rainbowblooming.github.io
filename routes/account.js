@@ -19,11 +19,11 @@ router.find = function (profile, callback) {
 					if (err) {
 						console.log(err);
 					} else {
-						 if (typeof callback === "function") {
+						if (typeof callback === "function") {
 							 // Call it, since we have confirmed it is callable​
 							if(result.rows) {
 								console.log('有查到使用者');
-								callback(err, profile.id).call;
+								callback(err, profile.id);
 							}
    						 }
 						console.log('驗證查詢: result.rows = '+result.rows);
