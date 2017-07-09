@@ -89,25 +89,27 @@ passport.use(new GoogleStrategy({
 			email = profile.emails[0].value;
 			session_user = profile.id;
 			console.log('mail = '+email +'; profile.id = '+session_user);
-//			Account.find(profile.emails[0].value, function (err, user) {
-//				if (err) { return done(err); }
-//				if (!user) {
-//					return done(null, false, { message: 'Incorrect username.' });
-//				}
-//				if (user) {
-//					return done(null, session_user);
-//				}
-//			});
-			var findResult = Account.find(profile.emails[0].value);
-			console.log('findResult = '+findResult);
-
-			if(findResult){
-				console.log('執行完 Account.find, 而且有找到. ');
-				return done(null, session_user);
-			} else {
-				console.log('執行完 Account.find, 沒有找到. ');
-	    	    return done(null, false, { message: '帳號沒有權限.' });
-			}
+//			Account.find(profile.emails[0].value, function (err, session_user) {
+			// 傳 profile 進去, 就可以給 email 和 profile.id
+			Account.find(profile, function (err, session_user) {
+				if (err) { return done(err); }
+				if (!session_user) {
+					return done(null, false, { message: 'Incorrect username.' });
+				}
+				if (session_user) {
+					return done(null, session_user);
+				}
+			});
+//			var findResult = Account.find(profile.emails[0].value);
+//			console.log('findResult = '+findResult);
+//
+//			if(findResult){
+//				console.log('執行完 Account.find, 而且有找到. ');
+//				return done(null, session_user);
+//			} else {
+//				console.log('執行完 Account.find, 沒有找到. ');
+//	    	    return done(null, false, { message: '帳號沒有權限.' });
+//			}
 		} catch (err) {
 			console.log('err from : '+err);
 			return done(null, false, { message: '錯誤發生.' });
