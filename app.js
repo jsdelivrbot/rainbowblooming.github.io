@@ -98,8 +98,10 @@ passport.use(new GoogleStrategy({
 //					return done(null, session_user);
 //				}
 //			});
+			var findResult = Account.find(profile.emails[0].value);
+			console.log('findResult = '+findResult);
 
-			if(Account.find(profile.emails[0].value)){
+			if(findResult){
 				console.log('執行完 Account.find, 而且有找到. ');
 				return done(null, session_user);
 			} else {
