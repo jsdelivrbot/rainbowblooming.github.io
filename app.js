@@ -88,7 +88,17 @@ passport.use(new GoogleStrategy({
 		try {
 			email = profile.emails[0].value;
 			session_user = profile.id;
-			console.log('mail = '+email +'; profile.id = '+session_user)
+			console.log('mail = '+email +'; profile.id = '+session_user);
+//			Account.find(profile.emails[0].value, function (err, user) {
+//				if (err) { return done(err); }
+//				if (!user) {
+//					return done(null, false, { message: 'Incorrect username.' });
+//				}
+//				if (user) {
+//					return done(null, session_user);
+//				}
+//			});
+
 			if(Account.find(profile.emails[0].value)){
 				console.log('執行完 Account.find, 而且有找到. ');
 				return done(null, session_user);
