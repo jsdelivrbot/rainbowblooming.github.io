@@ -8,5 +8,3 @@ CREATE TABLE account (
 	PRIMARY KEY (sn)
 );
 
--- backup data
-insert into account (id, email, upd_sn, upd_date) values ('hao', 'hao.wu1980@gmail.com', 1, now());

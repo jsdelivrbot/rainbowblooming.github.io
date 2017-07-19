@@ -58,7 +58,8 @@ app.get('/', function(request, response) {
 	response.render('login');
 });
 
-app.get('/index', checkLogin, function(request, response) {
+//app.get('/index', checkLogin, function(request, response) {
+app.get('/index', function(request, response) {
 	response.render('index');
 });
 
