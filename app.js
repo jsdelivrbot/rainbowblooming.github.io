@@ -118,6 +118,11 @@ passport.use(new GoogleStrategy({
 	}
 ));
 
+// user manage
+app.get('/manage', function(request, response) {
+	response.render('manage');
+});
+
 // 測試 LocalStrategy
 //passport.use(new LocalStrategy(
 //  function(username, password, done) {
